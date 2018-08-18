@@ -11,6 +11,7 @@ INDEX_FILE="index.html"
 TMP_FOLDER="/tmp/tr-web-control"
 PACK_NAME="src.tar.gz"
 WEB_HOST="https://github.com/ronggang/twc-release/raw/master/"
+WGET_CMD="wget --secure-protocol=TLSv1_2 "
 DOWNLOAD_URL="$WEB_HOST$PACK_NAME"
 # 安装类型
 # 1 安装至当前 Transmission Web 所在目录
@@ -245,7 +246,7 @@ download() {
 	fi
 	showLog "$MSG_DOWNLOADING"
 	echo ""
-	wget "$DOWNLOAD_URL" --no-check-certificate
+    $(WGET_CMD) "$DOWNLOAD_URL" --no-check-certificate
 	# 判断是否下载成功
 	if [ $? -eq 0 ]; then
 		showLog "$MSG_DOWNLOAD_COMPLETE"
@@ -475,7 +476,7 @@ downloadInstallScript() {
 		rm "$SCRIPT_NAME"
 	fi
 	showLog "$MSG_DOWNLOADING_INSTALL_SCRIPT"
-	wget "https://github.com/ronggang/transmission-web-control/raw/master/release/$SCRIPT_NAME" --no-check-certificate
+    $(WGET_CMD) "https://github.com/ronggang/transmission-web-control/raw/master/release/$SCRIPT_NAME" --no-check-certificate
 	# 判断是否下载成功
 	if [ $? -eq 0 ]; then
 		showLog "$MSG_INSTALL_SCRIPT_DOWNLOAD_COMPLETE"
@@ -486,7 +487,7 @@ downloadInstallScript() {
 	fi
 }
 
-if [ "$USER" != 'root' ]; then
+if [ "$USER" != 'root' && "USER" != 'admin' ]; then
 	showLog "$MSG_NON_ROOT_USER"
 	exit -1
 fi
