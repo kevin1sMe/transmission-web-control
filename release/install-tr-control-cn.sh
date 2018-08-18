@@ -11,7 +11,6 @@ INDEX_FILE="index.html"
 TMP_FOLDER="/tmp/tr-web-control"
 PACK_NAME="src.tar.gz"
 WEB_HOST="https://github.com/ronggang/twc-release/raw/master/"
-WGET_CMD="wget --secure-protocol=TLSv1_2 "
 DOWNLOAD_URL="$WEB_HOST$PACK_NAME"
 # 安装类型
 # 1 安装至当前 Transmission Web 所在目录
@@ -87,6 +86,10 @@ if [ "$ARG1" = "auto" ]; then
 else
 	ROOT_FOLDER=$ARG1
 fi
+
+Wget() {
+    wget --secure-protocol=TLSv1_2 $*
+}
 
 initValues() {
 	# 判断临时目录是否存在，不存在则创建
@@ -246,7 +249,7 @@ download() {
 	fi
 	showLog "$MSG_DOWNLOADING"
 	echo ""
-    $(WGET_CMD) "$DOWNLOAD_URL" --no-check-certificate
+    Wget "$DOWNLOAD_URL" --no-check-certificate
 	# 判断是否下载成功
 	if [ $? -eq 0 ]; then
 		showLog "$MSG_DOWNLOAD_COMPLETE"
@@ -476,7 +479,7 @@ downloadInstallScript() {
 		rm "$SCRIPT_NAME"
 	fi
 	showLog "$MSG_DOWNLOADING_INSTALL_SCRIPT"
-    $(WGET_CMD) "https://github.com/ronggang/transmission-web-control/raw/master/release/$SCRIPT_NAME" --no-check-certificate
+    Wget "https://github.com/ronggang/transmission-web-control/raw/master/release/$SCRIPT_NAME" --no-check-certificate
 	# 判断是否下载成功
 	if [ $? -eq 0 ]; then
 		showLog "$MSG_INSTALL_SCRIPT_DOWNLOAD_COMPLETE"
